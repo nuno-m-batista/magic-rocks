@@ -7,4 +7,4 @@
 ## Start to use
 
 * on file ` app.js `, right-click mouse button and choose **Run As > Nodejs Application**
-* on a browser, type this URL : [ http://localhost:3000 ] and enjoy it !
+* on a browser, type this URL : [http://localhost:3000](http://localhost:3000) and enjoy it !
