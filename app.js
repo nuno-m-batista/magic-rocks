@@ -19,19 +19,6 @@ curr_dir = curr_dir.replace("/","").replace("/",":/");
 
 
 confs.loadConfig('./.configurations');
-/*
-var configurations = null;
-
-fs.readFile('./.configurations', 'utf8', (err, data) => {
-	if (err) {
-		configurations = new Array();
-		console.log("No configurations' file found !");
-	} else {
-		configurations = JSON.parse(data);
-		console.log(configurations);
-	}
-});
-*/
 
 app.use('/static', express.static('static'));
 
@@ -381,9 +368,10 @@ app.post('/updateConfigs', function(req, res) {
 			} 
 		}
 		obj += "]\n";
-		confs.putFile('./.configurations',obj);
+		confs.setConfigAsString(obj);
+		confs.saveConfig('./.configurations');
 
-		configurations = JSON.parse(obj);
+		configurations = confs.conf;
 		
 		var content = getFile("static/console.html");
 		var configs = "";
