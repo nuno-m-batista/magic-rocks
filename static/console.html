@@ -1,0 +1,114 @@
+<html>
+	<head>
+	<script src="./static/jquery-3.1.1.min.js"></script>
+	<script>
+		function activate(tab_name) {
+			 $(".tab-cont").each(function() {
+					$(this).css("display" , "none");
+				});
+			$("#" + tab_name).css("display" , "table-row");
+		}
+
+		function updateConfigs() {
+			$("#configEdit").submit();
+		}
+
+		function addConfiguration() {
+			var content = $("#tbody").html();
+			var local_nr = $("#nr").val();
+			var nextNr = eval(local_nr) + 1;
+			var res = $.get("/ajaxBuildLine", { lineNr : nextNr }, function(e) {
+				content += e;
+				$("#tbody").html(content);
+				$("#nr").val(nextNr);
+			});
+		}
+		
+		function removeLine(lineNr) {
+			$("#remove_"+lineNr).val('true');
+			$("#line_"+lineNr).css('display','none');
+			updateConfigs();
+		}
+		
+		function loadConfigurations() {
+			var content = $("#tbody-002").html();
+			var res = $.get("/ajaxLoadConfigurations", { nextRefresh : $("#timeout_millis").val() }, function(e) {
+				content = e;
+				$("#tbody-002").html(content);
+			});
+			var content = $("#group-table").html();
+			var res = $.get("/ajaxLoadConfigurationsForGroup", { nextRefresh : $("#timeout_millis").val() }, function(e) {
+				content = e;
+				$("#group-table").html(content);
+			});
+		}
+		function checkSite(key, nr) {
+			var res = $.get("/ajaxCheckSite", { "key" : key }, function(content) {
+				$("#stoplight_" + nr).html(content);
+			});
+		}
+		function checkSiteForGroup(key, group, nr) {
+			var res = $.get("/ajaxCheckSiteforGroup", { "key" : key }, function(content) {
+				$("#stoplightForGroup_" + nr).html(content);
+			});
+		}
+	</script>
+	</head>
+	<body>
+		<table  style="width: 100%">
+			<tr>
+				<th><input type="button" value="Configuration" onclick="javascript:activate('tab-cont-001');"></th>
+				<th><input type="button" value="Console" onclick="javascript:activate('tab-cont-002');"></th>
+			</tr>
+			<tr id="tab-cont-001" name="tab-cont-001" style="display : none;" class="tab-cont">
+				<td colspan="2">
+					<form id="configEdit" name="configEdit" method="post" action="/updateConfigs">
+					<input type="hidden" name="nr" id="nr" value="{nrValue}">
+					<table border="1" style="width: 100%">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Host</th>
+								<th>Path</th>
+								<th>Group</th>
+								<th>Is group head ?</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody id="tbody" name="tbody">
+							{configurationBody}
+						</tbody>
+					</table>
+					<input type="button" value="Update Configuration" onclick="javascript:updateConfigs();">
+					<input type="button" value="Add Configuration" onclick="javascript:addConfiguration();">
+					</form>
+				</td>
+			</tr>
+			<tr id="tab-cont-002" name="tab-cont-002" style="display : table-row;" class="tab-cont">
+				<td colspan="2">
+					<form id="checkTargets" name="checkTargets" method="post" action="/checkTargets">
+					<input type="hidden" name="targetNr" id="targetNr" value="{targetNrValue}">
+					<table border="1" style="width: 100%">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Host</th>
+								<th>Path</th>
+								<th width="25%">Status</th>
+							</tr>
+						</thead>
+						<tbody id="tbody-002" name="tbody-002">
+						</tbody>
+						<script>
+							loadConfigurations();
+						</script>
+					</table>
+					<label for="timeout_millis">Refresh every ... </label><input type="text" id="timeout_millis" name="timeout_millis" value="15000"> milliseconds.
+					<table border="1" style="width: 100%" id="group-table" name="group-table">
+					</table>
+					</form>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
