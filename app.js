@@ -9,7 +9,7 @@ var execSync = require('child_process').execSync;
 var execAsync = require('child_process').exec;
 var http = require('http');
 var confs = require('./local_modules/configurations');
-var configurations = require('./local_modules/configurations').conf;
+var configurations = confs.conf;
 
 var sessions = new Array();
 var lastSessionId=0;
