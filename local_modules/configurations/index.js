@@ -5,6 +5,7 @@
 // imports dependencies
 exports.imports = {};
 exports.imports.fs = require('fs');
+exports.imports.log = require('../log');
 
 /**
  * configurations' array
@@ -38,10 +39,10 @@ exports.loadConfig = (file) => {
 	exports.imports.fs.readFile(file, 'utf8', (err, data) => {
 		if (err) {
 			exports.conf = new Array();
-			console.log("The configurations' file [ " + file + " ] was not found !");
+			exports.imports.log.error("The configurations' file [ " + file + " ] was not found !");
 		} else {
 			exports.setConfigAsString(data);
-			console.log("The configurations' file [ " + file + " ] was found and loaded :\n" + exports.getConfigAsString());
+			exports.imports.log.info("The configurations' file [ " + file + " ] was found and loaded :\n" + exports.getConfigAsString());
 		}
 	});
 };
@@ -55,7 +56,7 @@ exports.saveConfig = (file) => {
 		if(err) {
 			return console.log(err);
 		}
-		console.log("The configurations' file [ " + file + " ] was saved!");
+		exports.imports.log.info("The configurations' file [ " + file + " ] was saved!");
 	}); 
 };
 

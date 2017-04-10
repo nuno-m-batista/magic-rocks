@@ -9,6 +9,7 @@ var execSync = require('child_process').execSync;
 var execAsync = require('child_process').exec;
 var http = require('http');
 var confs = require('./local_modules/configurations');
+var log = require('./local_modules/log');
 var configurations = confs.conf;
 
 var sessions = new Array();
@@ -17,6 +18,9 @@ var lastSessionId=0;
 var curr_dir = (execSync("bash -c 'pwd'") + "").trim();
 curr_dir = curr_dir.replace("/","").replace("/",":/");
 
+
+log.addLogFile('./magic-rocks.log');
+log.setLogLevel('info');
 
 confs.loadConfig('./.configurations');
 
@@ -211,6 +215,7 @@ app.get('/', function (req, res) {
 	var content = getFile("static/console.html");
 	var configs = "";
 	var i = 0;
+	configurations = confs.conf;
 	if(configurations && configurations.length) {
 		for(var el in configurations) {
 			configs += buildConfigLine(configurations[el],i);
