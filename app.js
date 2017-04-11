@@ -1,5 +1,12 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
+//parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
+
 var formidable = require('formidable');
 var util = require('util');
 var fs = require('fs');
@@ -10,6 +17,7 @@ var execAsync = require('child_process').exec;
 var http = require('http');
 var confs = require('./local_modules/configurations');
 var log = require('./local_modules/log');
+var routes = require('./local_modules/controllers/restAPI');
 var configurations = confs.conf;
 
 var sessions = new Array();
@@ -20,11 +28,15 @@ curr_dir = curr_dir.replace("/","").replace("/",":/");
 
 
 log.addLogFile('./magic-rocks.log');
-log.setLogLevel('info');
+log.setLogLevel('debug');
 
-confs.loadConfig('./.configurations');
+confs.setDefaultFile('./.configurations');
+confs.loadConfigDefaultFile();
 
 app.use('/static', express.static('static'));
+
+
+routes.setUpService(app);
 
 function getFile(path) {
 	var content = execSync("bash -c 'cat " + path + "'");
