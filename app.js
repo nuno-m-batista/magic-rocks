@@ -36,7 +36,7 @@ confs.loadConfigDefaultFile();
 app.use('/static', express.static('static'));
 
 
-routes.setUpService(app);
+routes.setUpService(app,bodyParser);
 
 function getFile(path) {
 	var content = execSync("bash -c 'cat " + path + "'");
