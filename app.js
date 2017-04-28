@@ -17,7 +17,8 @@ var execAsync = require('child_process').exec;
 var http = require('http');
 var confs = require('./local_modules/configurations');
 var log = require('./local_modules/log');
-var routes = require('./local_modules/controllers/restAPI');
+var routes = require('./local_modules/restAPI');
+var configRESTAPI = require('./local_modules/controllers/configRESTAPI');
 var configurations = confs.conf;
 
 var sessions = new Array();
