@@ -5,8 +5,8 @@
 // imports dependencies
 exports.imports = {};
 exports.imports.fs = require('fs');
-exports.imports.log = require('../../log');
-exports.imports.conf = require('../../configurations');
+exports.imports.log = require('../log');
+exports.imports.conf = require('../configurations');
 
 exports.local = {};
 exports.local.app = null;
